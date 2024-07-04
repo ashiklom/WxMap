@@ -73,13 +73,13 @@ class Config(dict):
 
     def get_values(self, pathname, default=None):
 
-        return self.get_items(pathname, default).values()
+        return list(self.get_items(pathname, default).values())
 
 #------------------------------------------------------------------------------
 
     def get_keys(self, pathname, default=None):
 
-        return self.get_items(pathname, default).keys()
+        return list(self.get_items(pathname, default).keys())
 
 #------------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ class Config(dict):
 
         for path in paths:
 
-            if isinstance(path,basestring):
+            if isinstance(path,str):
                 pathname += path.split('/')
             else:
                 pathname.append(path)
@@ -206,9 +206,9 @@ class Config(dict):
           input_defs = yaml.load(f,Loader=yaml.UnsafeLoader)
 
         # Extract definitions
-        defs = { k:str(v) for k,v in os.environ.iteritems() }
+        defs = { k:str(v) for k,v in os.environ.items() }
         defs.update(kwargs)
-        defs.update( {k:str(v) for k,v in input_defs.iteritems()
+        defs.update( {k:str(v) for k,v in input_defs.items()
           if not isinstance(v,dict) and not isinstance(v,list)} )
 
         # Read input file as text file
@@ -290,7 +290,7 @@ class Config(dict):
         if not isinstance(dir,dict):
             return False
 
-        result = [key for key in dir.keys() if not isinstance(dir[key],dict)]
+        result = [key for key in list(dir.keys()) if not isinstance(dir[key],dict)]
 
         if result:
             return False
@@ -362,7 +362,7 @@ class Config(dict):
 
     def is_object_string(self, value):
 
-        if not isinstance(value, basestring): return False
+        if not isinstance(value, str): return False
         match = re.match(r'\w+\.\w+ \[\]', value)
         if match: return True
 
@@ -374,7 +374,7 @@ class Config(dict):
 
             new_key = str(key)
 
-            if not isinstance(key, basestring):
+            if not isinstance(key, str):
                 hash[new_key] = hash[key]
                 del hash[key]
 

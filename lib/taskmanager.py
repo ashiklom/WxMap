@@ -4,7 +4,7 @@
     Modules: subprocess, multiprocessing
 """
 
-from __future__ import print_function
+
 # should move print statements outside of module
 
 import time
@@ -77,7 +77,7 @@ class TaskManager(object):
         """
 
         ntask = len(self.task)
-        processes = self.task.keys()
+        processes = list(self.task.keys())
 
         for process in processes:
             p = self.task[process]

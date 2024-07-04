@@ -31,9 +31,9 @@ GrADS.
 __version__ = '1.1.3'
 
 
-from gacore       import *
-from numtypes     import *
-from simplekml    import SimpleKML
+from .gacore       import *
+from .numtypes     import *
+from .simplekml    import SimpleKML
 
 from numpy        import zeros, ones, average, newaxis, sqrt, pi, cos, inner, \
                          arange, fromfile, float32, ma, reshape, ndarray, \
@@ -98,7 +98,7 @@ class GaNum(GaCore):
         elif isinstance(expr,ndarray):
             return expr # this is handy for 'lsq'
         else:
-            raise GrADSError, "input <expr> has invalid type: %s"%type(expr)
+            raise GrADSError("input <expr> has invalid type: %s"%type(expr))
 
 #       Retrieve dimension environment
 #       ------------------------------
@@ -118,8 +118,8 @@ class GaNum(GaCore):
 #             special handling the different dimension permutations separately
 #             given the way GrADS invokes functions for XZ, YZ, ZT, etc
 #       ----------------------------------------------------------------------
-        if nx==1: raise GrADSError, 'lon must be varying but got nx=1'
-        if ny==1: raise GrADSError, 'lat must be varying but got ny=1'
+        if nx==1: raise GrADSError('lon must be varying but got nx=1')
+        if ny==1: raise GrADSError('lat must be varying but got ny=1')
 
 #       Loop over time/z, get a GrADS 2D slice at a time/z
 #       --------------------------------------------------
@@ -169,7 +169,7 @@ class GaNum(GaCore):
 
         except:
             self.setdim(dh)
-            raise GrADSError, 'could not export <%s>'%expr
+            raise GrADSError('could not export <%s>'%expr)
 
 
         grid.tyme = array([gat2dt(t) for t in grid.time])
@@ -197,7 +197,7 @@ class GaNum(GaCore):
 #       -----------------
         nx, ny = (dh.nx, dh.ny)
         if dh.rank !=2:
-            raise GrADSError, 'expecting rank=2 but got rank=%d'%dh.rank
+            raise GrADSError('expecting rank=2 but got rank=%d'%dh.rank)
 
 #       Create output handle, fill in some metadata
 #       -------------------------------------------
@@ -232,8 +232,7 @@ class GaNum(GaCore):
 #        if id!=0 or jd!=1:
         if id<0 or id>3 or jd<0 or jd>3 or id==jd:
             self.flush()
-            raise GrADSError, \
-                  'invalid exchange metadata (idim,jdim)=(%d,%d) - make sure <%s> is valid and that lon/lat is varying.'%(id,jd,expr)
+            raise GrADSError('invalid exchange metadata (idim,jdim)=(%d,%d) - make sure <%s> is valid and that lon/lat is varying.'%(id,jd,expr))
 
 #       Read data and coords
 #       --------------------
@@ -243,7 +242,7 @@ class GaNum(GaCore):
             grid.lat = fromfile(self.Reader,count=ny_,dtype=float32)
         except:
             self.flush()
-            raise GrADSError, 'problems exporting <'+expr+'>, fromfile() failed'
+            raise GrADSError('problems exporting <'+expr+'>, fromfile() failed')
 
 #       Annotate grid - assumes lon, lat
 #       --------------------------------
@@ -257,7 +256,7 @@ class GaNum(GaCore):
         rc = self._parseReader(Quiet=True)
         if rc:
             self.flush()
-            raise GrADSError, 'problems exporting <'+expr+'>, ipc_save() failed'
+            raise GrADSError('problems exporting <'+expr+'>, ipc_save() failed')
 
         grid.tyme = array([gat2dt(t) for t in grid.time])
 
@@ -286,14 +285,14 @@ class GaNum(GaCore):
 #       If IPC extension is not available, barf
 #       ---------------------------------------
         if not self.HAS_IPC:
-            raise GrADSError, "IPC extension not available - cannot import!"
+            raise GrADSError("IPC extension not available - cannot import!")
 
 #       Resolve Field
 #       -------------
         if isinstance(Field,GaField):
             grid = Field.grid
         else:
-            raise GrADSError, "Field has invalid type"
+            raise GrADSError("Field has invalid type")
                 
 #       Retrieve dimension environment
 #       ------------------------------
@@ -308,17 +307,16 @@ class GaNum(GaCore):
 #             special handling the different dimension permutations separately
 #             given the way GrADS invokes functions for XZ, YZ, ZT, etc
 #       ----------------------------------------------------------------------
-        if nx==1: raise GrADSError, 'lon must be varying but got nx=1'
-        if ny==1: raise GrADSError, 'lat must be varying but got ny=1'
+        if nx==1: raise GrADSError('lon must be varying but got nx=1')
+        if ny==1: raise GrADSError('lat must be varying but got ny=1')
 
 #       Determine actual load command
 #       -----------------------------
         if name == '<display>':
             cmd = 'display ipc_load()\n'
             if nz>1 and nt>1:
-                raise GrADSError, \
-                      'for <display> only one of z/t can vary'+\
-                      ' but got (nz,nt)=(%d,%d)'%(nz,nt) 
+                raise GrADSError('for <display> only one of z/t can vary'+\
+                      ' but got (nz,nt)=(%d,%d)'%(nz,nt)) 
         else:
             if self.Version[1] is '1':
                 cmd = 'ipc_define %s = ipc_load()\n'%name
@@ -330,7 +328,7 @@ class GaNum(GaCore):
         try:
             self.cmd("ipc_open - r")
         except GrADSError:
-            raise GrADSError, '<ipc_open - r> failed; is IPC installad?'
+            raise GrADSError('<ipc_open - r> failed; is IPC installad?')
         self.Writer.write(cmd) # asynchronous transfer
 
 #       Reshape and get original t/z offset
@@ -354,9 +352,8 @@ class GaNum(GaCore):
                     my = int(meta[l,k,4])
                     if mx!=nx_ or my!=ny_:
                         self.flush()
-                        raise GrADSError, \
-                             'nx/ny mismatch; got (%d,%d), expected (%d,%d)'%\
-                             (mx,my,nx_,ny_)
+                        raise GrADSError('nx/ny mismatch; got (%d,%d), expected (%d,%d)'%\
+                             (mx,my,nx_,ny_))
                     meta[l,k,:].tofile(self.Writer)
                     data[l,k,:,:].tofile(self.Writer)
                     grid.lon.tofile(self.Writer)
@@ -365,8 +362,7 @@ class GaNum(GaCore):
         except:
             self.flush()
             self.setdim(dh)
-            raise GrADSError, \
-                  'could not import <%s>, tofile() may have failed'%name
+            raise GrADSError('could not import <%s>, tofile() may have failed'%name)
 
 
 #       Check rc from asynchronous ipc_save
@@ -379,7 +375,7 @@ class GaNum(GaCore):
         self.setdim(dh)
         self.cmd("ipc_close")
         if rc:
-            raise GrADSError, 'problems importing <'+name+'>, ipc_load() failed'
+            raise GrADSError('problems importing <'+name+'>, ipc_load() failed')
 
 #........................................................................
 
@@ -401,7 +397,7 @@ class GaNum(GaCore):
         elif isinstance(expr,ndarray):
             return expr # this is handy for 'lsq'
         else:
-            raise GrADSError, "input <expr> has invalid type: %s"%type(expr)
+            raise GrADSError("input <expr> has invalid type: %s"%type(expr))
 
         d = self.eval(expr)
         c = self.coords()
@@ -464,8 +460,7 @@ class GaNum(GaCore):
 #       ---------------------
         dh = self.query("dims",Quiet=True)
         if dh.nt < 2:
-            raise GrADSError, \
-                  'need at least 2 time steps for EOFS but got nt=%d'%dh.nt
+            raise GrADSError('need at least 2 time steps for EOFS but got nt=%d'%dh.nt)
         nt, nz, ny, nx = (dh.nt, dh.nz, dh.ny, dh.nx)
 
 #       Export N-dimensional array
@@ -488,7 +483,7 @@ class GaNum(GaCore):
             offset = average(u,axis=0)
             u = u - offset[newaxis,:,:,:]
         else:
-            raise GrADSError, 'Unknown transf <%s>'%transf
+            raise GrADSError('Unknown transf <%s>'%transf)
     
 #       Scale by stdv if z-scores required
 #       ----------------------------------
@@ -603,8 +598,7 @@ class GaNum(GaCore):
 
         N = len(x_exprs)
         if N<1:
-            raise GrADSError, \
-                'expecting at least one predictor but got %d'%N
+            raise GrADSError('expecting at least one predictor but got %d'%N)
         if Bias: N = N + 1
         
 #       Retrieve target
@@ -661,12 +655,10 @@ class GaNum(GaCore):
         if dh==None:
             dh = self.query("dims", Quiet=True)
         if dh.nx==1 or dh.ny==1:
-            raise GrADSError, \
-            "expecting varying x/y dimensions but got (nx,ny) = (%d,%d)"\
-            %(dh.nx,dh.ny)
+            raise GrADSError("expecting varying x/y dimensions but got (nx,ny) = (%d,%d)"\
+            %(dh.nx,dh.ny))
         if dh.nt>1:
-            raise GrADSError, \
-            "sorry, cannot interpolate with varying time dimension"
+            raise GrADSError("sorry, cannot interpolate with varying time dimension")
 
 #       Evaluate GrADS expression
 #       -------------------------
@@ -726,7 +718,7 @@ class GaNum(GaCore):
         # Inputs must be 1D arrays
         # ------------------------
         if len(lons.shape)!=1 or len(lats.shape)!=1:
-            raise GrADSError, "lons, lats, time must be 1D arrays"
+            raise GrADSError("lons, lats, time must be 1D arrays")
         
         
         # Retrieve dimension environment
@@ -807,7 +799,7 @@ class GaNum(GaCore):
         # Inputs must be 1D arrays
         # ------------------------
         if len(lons.shape)!=1 or len(lats.shape)!=1 or len(tyme.shape)!=1:
-            raise GrADSError, "lons, lats, tyme must be 1D arrays"
+            raise GrADSError("lons, lats, tyme must be 1D arrays")
         
         # Retrieve dimension environment
         # ------------------------------
@@ -830,7 +822,7 @@ class GaNum(GaCore):
         # ------------------------------------------------
         fh = self.query("file",Quiet=True)
         if tbeg<1 or tbeg>fh.nt:
-            raise GrADSError, "(tbeg,tend) outside of range (1,%d)"%fh.nt
+            raise GrADSError("(tbeg,tend) outside of range (1,%d)"%fh.nt)
 
         # Find time step
         # --------------
@@ -842,7 +834,7 @@ class GaNum(GaCore):
         V, I = [], []
         for t in range(tbeg,tend+1):
             now = self._getDatetime(t) # grads time is set to t
-            if Verbose: print " [] XY Interpolating at ", now
+            if Verbose: print(" [] XY Interpolating at ", now)
             i = (tyme>=now-dt) & (tyme<=now+dt)
             if any(i):
                 self._tightDomain(lons[i],lats[i]) # minimize I/O

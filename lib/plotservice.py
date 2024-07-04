@@ -1188,7 +1188,7 @@ class PlotService(object):
                      'tkscale':  plot.get_attr(layer,'tkscale',None)
                    }
 
-        cbopts   = { k:v for k,v in cbopts.iteritems() if v is not None }
+        cbopts   = { k:v for k,v in cbopts.items() if v is not None }
 
         args     = json.dumps(cbopts)
 
@@ -1245,11 +1245,11 @@ class PlotService(object):
 
     def nlog(self,x,a):
         if a<=0:
-            raise ValueError, 'Expected a>0 but got a=%f'%a
+            raise ValueError('Expected a>0 but got a=%f'%a)
         return log(a*x+1.0)/log(a+1.0)
     def nexp(self,x,a):
         if a<=0:
-            raise ValueError, 'Expected a>0 but got a=%f'%a
+            raise ValueError('Expected a>0 but got a=%f'%a)
         return (exp(x * log(a+1.0)) - 1.0) / a
 
     def log_scale(self, x): return self.nlog(x,10.0)

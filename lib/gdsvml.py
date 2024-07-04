@@ -69,7 +69,7 @@ class GDSVML(object):
         self.icolor = 31
 
         self.colors = {re.sub("\s+"," ",v.strip()):int(k)
-                            for k,v in self.default['rgb'].iteritems()}
+                            for k,v in self.default['rgb'].items()}
 
         self.colors = {}
 
@@ -179,7 +179,7 @@ class GDSVML(object):
                 return ' '.join(list2)
       
             pick  = lambda pair: pair[0] if pair[0] is not None else pair[1]
-            return ' '.join(map(pick, zip(list1, list2)))
+            return ' '.join(map(pick, list(zip(list1, list2))))
 
     def get_color(self, cmd):
 

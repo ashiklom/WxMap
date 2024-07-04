@@ -26,9 +26,9 @@ class GaHandle(object):
         repr += '  Handle name = %s\n' % self.name
         repr += '==================================\n'
         
-        longestKeyLen = max( map(len, self.__dict__.keys()) )
+        longestKeyLen = max( list(map(len, list(self.__dict__.keys()))) )
         
-        for k, v in self.__dict__.iteritems():
+        for k, v in self.__dict__.items():
             repr += '%s = %s' % (k.rjust(longestKeyLen), v)
             repr += '\n'
             

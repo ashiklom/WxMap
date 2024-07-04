@@ -255,7 +255,7 @@ class Service(MapService):
 
         for obj in plot:
 
-            print obj.cmds
+            print(obj.cmds)
             handler = self.handler.get(obj.macro, self.default)
             handler(obj)
 
@@ -883,7 +883,7 @@ class Service(MapService):
 
     def display(self, obj):
 
-        print obj.cmds
+        print(obj.cmds)
         self.display_slice(obj)
         self.default(obj)
     
@@ -1270,7 +1270,7 @@ class Service(MapService):
 
         argstr = obj.cmds[-1][15:]
         options = json.loads(argstr)
-        options = {k:v for k,v in options.iteritems() if v != '--auto'}
+        options = {k:v for k,v in options.items() if v != '--auto'}
 
         mpvals = options['mpvals'].split() + options['lat'].split()
         lon1, lon2, lat1, lat2 = [int(s) for s in mpvals[0:4]]
@@ -1282,7 +1282,7 @@ class Service(MapService):
         xlint = round(options.get('xlint', (lon2-lon1)/5.0))
         ylint = round(options.get('ylint', (lat2-lat1)/5.0))
 
-        xlevs = range(int(xlbeg), int(xlend+1), int(xlint))
+        xlevs = list(range(int(xlbeg), int(xlend+1), int(xlint)))
         clevs = xlevs
         clevs += [x-360 for x in xlevs if x >= 180]
         clevs += [x+360 for x in xlevs if x < 0]
@@ -1308,7 +1308,7 @@ class Service(MapService):
 
         lat = (lat1 + lat2) / 2.0
 
-        print 'clevs = ' + str(clevs)
+        print('clevs = ' + str(clevs))
         for lon in clevs:
 
             ilon = int(lon)
@@ -1329,7 +1329,7 @@ class Service(MapService):
             self.ds('set string ' + str(white) + ' c 5')
             self.ds('draw string ' + str(x) + ' ' + str(y) + ' `n' + clon)
 
-        ylevs = range(int(ylbeg), int(ylend+1), int(ylint))
+        ylevs = list(range(int(ylbeg), int(ylend+1), int(ylint)))
         clevs = [str(y) for y in ylevs]
 
         self.ds('set gxout contour')
@@ -1388,7 +1388,7 @@ class Service(MapService):
         if os.path.isfile(fname): return fname
 
         try:
-            os.makedirs(path, 0755)
+            os.makedirs(path, 0o755)
         except:
             pass
 
@@ -1564,13 +1564,13 @@ class Service(MapService):
         tl = getcolor(tint, "L")  # tint color's overall luminosity
         if not tl: tl = 1  # avoid division by zero
         tl = float(tl)  # compute luminosity preserving tint factors
-        sr, sg, sb = map(lambda tv: tv/tl, (tr, tg, tb))  # per component
+        sr, sg, sb = [tv/tl for tv in (tr, tg, tb)]  # per component
                                                       # adjustments
         # create look-up tables to map luminosity to adjusted tint
         # (using floating-point math only to compute table)
-        luts = (tuple(map(lambda lr: int(lr*sr + 0.5), range(256))) +
-                tuple(map(lambda lg: int(lg*sg + 0.5), range(256))) +
-                tuple(map(lambda lb: int(lb*sb + 0.5), range(256))))
+        luts = (tuple([int(lr*sr + 0.5) for lr in range(256)]) +
+                tuple([int(lg*sg + 0.5) for lg in range(256)]) +
+                tuple([int(lb*sb + 0.5) for lb in range(256)]))
         l = grayscale(src)  # 8-bit luminosity version of whole image
         if Image.getmodebands(src.mode) < 4:
             merge_args = (src.mode, (l, l, l))  # for RGB verion of grayscale
@@ -1593,7 +1593,7 @@ class Service(MapService):
         elif service == 'etopo':
             map.etopo()
         elif service == 'drawlsmask':
-            print 'Using cached mask'
+            print('Using cached mask')
         else:
             map.arcgisimage(service=service, xpixels = 5000)
 

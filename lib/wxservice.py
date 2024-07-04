@@ -104,7 +104,7 @@ class WXService(object):
             if is_specified: continue
 
             value = play[key]
-            if not isinstance(value, basestring): continue
+            if not isinstance(value, str): continue
 
             try:
                 request[key] = dt.datetime.strptime(value,'%Y%m%dT%H%M%S')
@@ -171,7 +171,7 @@ class WXService(object):
 
     def get_plotservice(self, resource):
 
-        for key in resource.keys():
+        for key in list(resource.keys()):
             if isinstance(resource[key],dict):
                 service = resource[key].get('service',None)
                 if getattr(service, 'get_plot', None):
@@ -233,8 +233,8 @@ class WXService(object):
         r_level  = response.get('level', None)
 
         theme   = self.ps.name
-        fields  = self.config([theme, 'plot'], {}).keys()
-        regions = self.config(['region'], {}).keys()
+        fields  = list(self.config([theme, 'plot'], {}).keys())
+        regions = list(self.config(['region'], {}).keys())
 
         rmask  = self.config('regions', regions)
         rmask  = play.get('regions', rmask)
@@ -291,26 +291,26 @@ class WXService(object):
             path    = ['stream']
             result  = self.config.find(path, name='long_name',depth=1)
             result  = self.config.get_items(result)
-            default = result.keys()
+            default = list(result.keys())
             default = self.config('streams', default)
             mask    = play.get('streams', default)
-            streams.update({ k:v for k,v in result.iteritems() if k in mask })
+            streams.update({ k:v for k,v in result.items() if k in mask })
 
             path      = root + ['plot']
             result    = self.config.find(path, name='long_name',depth=1)
             result    = self.config.get_items(result)
-            f_default = result.keys()
+            f_default = list(result.keys())
             f_default = self.config('fields', f_default)
             mask      = play.get('fields', f_default)
-            fields.update({ k:v for k,v in result.iteritems() if k in mask })
+            fields.update({ k:v for k,v in result.items() if k in mask })
             
             path    = ['region']
             result  = self.config.find(path, name='long_name',depth=1)
             result  = self.config.get_items(result)
-            default = result.keys()
+            default = list(result.keys())
             default = self.config('regions', default)
             mask    = play.get('regions', default)
-            regions.update({ k:v for k,v in result.iteritems() if k in mask })
+            regions.update({ k:v for k,v in result.items() if k in mask })
             
 #           default = fields.keys()[0]
             default = f_default[0]
@@ -325,8 +325,8 @@ class WXService(object):
             mask    = play.get('levels', default)
             levels  = [lev for lev in result if lev in mask]
             
-        return dict(zip(['stream', 'field', 'region', 'level'],
-                   [streams,  fields,  regions,  levels]))
+        return dict(list(zip(['stream', 'field', 'region', 'level'],
+                   [streams,  fields,  regions,  levels])))
 
     def get_user_interface(self):
 

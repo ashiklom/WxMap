@@ -44,13 +44,13 @@ class Dataset(object):
     def write_global_attr(self, attr, **kwargs):
 
         attr = collections.OrderedDict(attr)
-        attr.update(kwargs.items())
+        attr.update(list(kwargs.items()))
         self.fh.setncatts(attr)
 
     def write_var(self, name, var, dims, attr, **kwargs):
 
         attr = collections.OrderedDict(attr)
-        attr.update(kwargs.items())
+        attr.update(list(kwargs.items()))
 
         if dims and len(dims) == 1:
             self.fh.createDimension(name , var.size)

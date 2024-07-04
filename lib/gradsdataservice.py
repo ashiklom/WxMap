@@ -27,7 +27,7 @@ class Service(GaNum,DataService):
 
     def open(self, request, **kwargs):
 
-        if isinstance(request,basestring):
+        if isinstance(request,str):
             return super(Service,self).open(request)
 
         hash = dict(request)
@@ -43,7 +43,7 @@ class Service(GaNum,DataService):
             self.fileID = fh.fileinfo.fid
             return fh
 
-        print "**OPENING** ",file
+        print("**OPENING** ",file)
         fh   = super(Service,self).open(file)
 
         self.fileID = fh.fid

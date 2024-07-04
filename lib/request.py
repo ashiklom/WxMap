@@ -18,7 +18,7 @@ class Request(dict):
         # Convert all datetime objects to mydatetime objects
 
         if not encoder:
-            for k,v in self.iteritems():
+            for k,v in self.items():
                 try:
                     self[k] = dt.datetime(v.year, v.month, v.day,
                                           v.hour, v.minute)
@@ -102,7 +102,7 @@ class Request(dict):
 
         value = self.get(key, default)
 
-        if value and isinstance(value, basestring):
+        if value and isinstance(value, str):
             return value.split('/')[-1]
 
         return value

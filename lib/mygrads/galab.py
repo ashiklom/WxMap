@@ -39,9 +39,9 @@ has to offer.
 
 __version__ = '1.2.2'
 
-from gacore    import dt2gat, gat2dt
-from ganum     import *
-from numtypes  import *
+from .gacore    import dt2gat, gat2dt
+from .ganum     import *
+from .numtypes  import *
 from tempfile  import mktemp
 from datetime  import datetime, timedelta
 
@@ -157,9 +157,8 @@ class GaLab(GaNum):
                 self.transf = True
                 ll_lon,ll_lat,ur_lon,ur_lat = opts
             else:
-                raise GrADSError, \
-                'Projection "geos" expects opts = ' + \
-                ' (ll_lon,ll_lat,ur_lon,ur_lat,lon_0,satellite_height)'
+                raise GrADSError('Projection "geos" expects opts = ' + \
+                ' (ll_lon,ll_lat,ur_lon,ur_lat,lon_0,satellite_height)')
             self.map = Basemap(llcrnrlon=ll_lon, llcrnrlat=ll_lat, \
                                 urcrnrlon=ur_lon, urcrnrlat=ur_lat, \
                                 resolution=resolution, area_thresh=area_thresh,\
@@ -186,9 +185,8 @@ class GaLab(GaNum):
                 ll_lon,ll_lat,ur_lon,ur_lat,lon_0 = opts
 
             else:
-                raise GrADSError, \
-                'Projection "geos" expects opts=subpoint_lon  or' + \
-                ' opts=(ll_lon,ll_lat,ur_lon,ur_lat,subpoint_lon)'
+                raise GrADSError('Projection "geos" expects opts=subpoint_lon  or' + \
+                ' opts=(ll_lon,ll_lat,ur_lon,ur_lat,subpoint_lon)')
 
             if proj=='geos':
                 self.map = Basemap(projection='geos', \
@@ -229,8 +227,7 @@ class GaLab(GaNum):
                 lon_0 = opts[0]
                 lat_0 = opts[1]
             else:
-                raise GrADSError, \
-                'Projection "ortho" expects opts = (lon_0,lat_0)'
+                raise GrADSError('Projection "ortho" expects opts = (lon_0,lat_0)')
 
             self.map = Basemap(projection='ortho', \
                                 lon_0=lon_0, lat_0=lat_0, \
@@ -259,8 +256,7 @@ class GaLab(GaNum):
                 lon_0 = opts[0]
                 lat_0 = opts[1]
             else:
-                raise GrADSError, \
-                'Projection "%s" expects opts = (lon_0,boundinglat)'%proj
+                raise GrADSError('Projection "%s" expects opts = (lon_0,boundinglat)'%proj)
 
             if lat_0>0:
                 proj1 = 'npstere'
@@ -302,7 +298,7 @@ class GaLab(GaNum):
         """
 
         if not HAS_PIL:
-            raise GrADSError, 'PIL is required to for method "blue_marble"'
+            raise GrADSError('PIL is required to for method "blue_marble"')
 
 #       User specified file name
 #       ------------------------
@@ -319,7 +315,7 @@ class GaLab(GaNum):
  	    elif mode=='on' or mode=='ON' or mode=='On':
 	        self.blue = ma.zeros((1,1,4)) # Will be filled in at first use
 	    else:
-                raise GrADSError, 'Invalid Blue Marble mode'
+                raise GrADSError('Invalid Blue Marble mode')
 	    self.blue_stamp = None # will force update on first use
 	    self.blue_size = (-1,-1)            
             return None
@@ -376,7 +372,7 @@ class GaLab(GaNum):
                 i = int(d/delta)
                 n = nlons - i 
                 if i<0 or i>=nlons:
-                    raise GrADSError, "Internal error shifting image, i=%d"%i
+                    raise GrADSError("Internal error shifting image, i=%d"%i)
                 tmp = rgba.copy()
                 rgba[:,0:n,:] = tmp[:,i:nlons,:]
                 rgba[:,n:nlons,:] = tmp[:,0:i,:]
@@ -416,8 +412,8 @@ class GaLab(GaNum):
         if dh==None:
             dh = self.query("dims", Quiet=True)
         if dh.nz>1 or dh.nt>1:
-            raise GrADSError, 'Not a horizontal slice; ' + \
-                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt)
+            raise GrADSError('Not a horizontal slice; ' + \
+                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt))
 
 #       Evaluate GrADS expression
 #       -------------------------
@@ -477,8 +473,8 @@ class GaLab(GaNum):
         if dh==None:
             dh = self.query("dims", Quiet=True)
         if dh.nz>1 or dh.nt>1:
-            raise GrADSError, 'Not a horizontal slice; ' + \
-                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt)
+            raise GrADSError('Not a horizontal slice; ' + \
+                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt))
 
 #       Make sure we have a basemap
 #       ---------------------------
@@ -623,8 +619,8 @@ class GaLab(GaNum):
         if dh==None:
             dh = self.query("dims", Quiet=True)
         if dh.nz>1 or dh.nt>1:
-            raise GrADSError, 'Not a horizontal slice; ' + \
-                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt)
+            raise GrADSError('Not a horizontal slice; ' + \
+                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt))
 
 #       Make sure we have a basemap
 #       ---------------------------
@@ -730,8 +726,8 @@ class GaLab(GaNum):
         if dh==None:
             dh = self.query("dims", Quiet=True)
         if dh.nz>1 or dh.nt>1:
-            raise GrADSError, 'Not a horizontal slice; ' + \
-                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt)
+            raise GrADSError('Not a horizontal slice; ' + \
+                  'expected (nz,nt)=(1,1) but got (%d,%d)'%(dh.nz,dh.nt))
 
 #       Make sure we have a basemap
 #       ---------------------------

@@ -61,8 +61,8 @@ month_file = cfg['ltm_wspd']['MONTH_FILE']
 
 ut = myutils.Utils()
 
-defs = { k:str(v) for k,v in iter(os.environ.items()) }
-defs.update( {k:str(v) for k,v in iter(cfg.items()) if not isinstance(v,dict)} )
+defs = { k:str(v) for k,v in iter(list(os.environ.items())) }
+defs.update( {k:str(v) for k,v in iter(list(cfg.items())) if not isinstance(v,dict)} )
 defs.update(cfg.get('environment',{}))
 
 # Create monthly long-term means

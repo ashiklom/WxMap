@@ -65,7 +65,7 @@ class Plot(object):
         defs.update(self.defs)
         if self.config: defs.update(self.config.get('defs', {}))
         defs.update(kwargs)
-        defs = { k:str(v) for k,v in defs.iteritems() }
+        defs = { k:str(v) for k,v in defs.items() }
 
         cmds = self.rsubstitute(commands, **defs)
         cmds = cmds.strip().split('\n')
@@ -178,7 +178,7 @@ class Plot(object):
         var = cmd.split('=')[0].split()[1]
         expr = cmd.replace('RANDOM', '1')
         self.ds(expr)
-        print 'var = ', var
+        print('var = ', var)
         f = self.ds.exp(var)
 
         ydim, xdim = f.shape
@@ -631,8 +631,8 @@ class Plot(object):
         logos   = self.config(['stream', stream, 'logos'], logos)
         logos   = self.config(path + ['logos'], logos)
         default = self.config(['logo', 'default'], {})
-        default = { k:v for k,v in default.iteritems()
-                           if isinstance(v, basestring) }
+        default = { k:v for k,v in default.items()
+                           if isinstance(v, str) }
 
         for l in logos:
 
@@ -835,7 +835,7 @@ class Plot(object):
         if layers is None: layers = map.get('layers', [])
 
         for name in layers:
-            layer = { k:v for k,v in map.iteritems() if k != 'layers' }
+            layer = { k:v for k,v in map.items() if k != 'layers' }
             layer.update(self.config(['map',name]))
             maps += self.get_map(request, layer)
 
@@ -1024,7 +1024,7 @@ class Plot(object):
 
         while 'cdict' in layer:
             value = self.get_attr(layer, 'cdict')
-            layer = {k:v for k,v in layer.iteritems() if k != 'cdict'}
+            layer = {k:v for k,v in layer.items() if k != 'cdict'}
             if isinstance(value,dict): layer.update(value)
 
         if layer.get(name, 'on') == 'off': return {}
@@ -1110,7 +1110,7 @@ class Plot(object):
 
             match = True
 
-            for key,value in d.iteritems():
+            for key,value in d.items():
 
                 if key[0] == '%':
 

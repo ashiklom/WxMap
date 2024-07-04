@@ -99,7 +99,7 @@ HAS_GALAB  = False
 HAS_GAYA   = False
 
 try:
-    import galab
+    from . import galab
     GrADS  = galab.GaLab
     GaCore = galab.GaCore
     GaLab  = galab.GaLab
@@ -108,7 +108,7 @@ try:
     HAS_GANUM  = True
     HAS_GACORE = True
     try:
-        import gaya
+        from . import gaya
         GrADS = gaya.GaYa
         GaYa  = gaya.GaYa
         HAS_GAYA = True
@@ -116,23 +116,23 @@ try:
         HAS_GAYA = False
 except:
     try:
-        import ganum
+        from . import ganum
         GrADS  = ganum.GaNum
         GaCore = ganum.GaCore
         GaNum  = ganum.GaNum
         HAS_GANUM  = True
         HAS_GACORE = True
     except:
-        import gacore
+        from . import gacore
         GrADS  = gacore.GaCore
         GaCore = gacore.GaCore
         HAS_GACORE = True
 try:
-    import gacm
+    from . import gacm
     HAS_GACM = True
 except:
     HAS_GACM = False
 
-from gacore   import GrADSError
+from .gacore   import GrADSError
 if ( HAS_GANUM ) :
-    from numtypes import GaGrid, GaField
+    from .numtypes import GaGrid, GaField

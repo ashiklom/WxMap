@@ -119,8 +119,8 @@ class SegmentedColormap(ColormapAlpha):
 
 #       Inherit segment data from an existing colormap,
 #       possibly redefining alpha channel
-        if self._segmentdata.has_key('cmap'):
-            if self._segmentdata.has_key('alpha'):
+        if 'cmap' in self._segmentdata:
+            if 'alpha' in self._segmentdata:
                 alphad = self._segmentdata['alpha'] # save this
             else:
                 alphad = None
@@ -135,7 +135,7 @@ class SegmentedColormap(ColormapAlpha):
         if self._scale!=None:
             scale = lambda x: min(max(self._scale(x),0.0),1.0)
             data_s = {}
-            for key, val in self._segmentdata.iteritems():
+            for key, val in self._segmentdata.items():
                 if not isinstance(val, list): continue 
                 valnew = [ (scale(a), b, c) for a, b, c in val ]
                 data_s[key] = valnew
@@ -145,7 +145,7 @@ class SegmentedColormap(ColormapAlpha):
 #       -------------------------------------
         if self._reverse:
             data_r = {}
-            for key, val in self._segmentdata.iteritems():
+            for key, val in self._segmentdata.items():
                 valnew = [(1.0-a, b, c) for a, b, c in list(reversed(val))]
                 data_r[key] = valnew
             self._segmentdata = data_r
@@ -159,7 +159,7 @@ class SegmentedColormap(ColormapAlpha):
 
 #       RGB is always there by alpha may not, so we check for it
 #       --------------------------------------------------------
-        if self._segmentdata.has_key('alpha'):
+        if 'alpha' in self._segmentdata:
             self._lut[:-3, 3] = makeMappingArray(self.N, self._segmentdata['alpha'])
 
 #       Save intrinsic alpha
@@ -173,11 +173,11 @@ class SegmentedColormap(ColormapAlpha):
 
 def nlog(x,a):
     if a<=0:
-        raise ValueError, 'Expected a>0 but got a=%f'%a
+        raise ValueError('Expected a>0 but got a=%f'%a)
     return log(a*x+1.0)/log(a+1.0)
 def nexp(x,a):
     if a<=0:
-        raise ValueError, 'Expected a>0 but got a=%f'%a
+        raise ValueError('Expected a>0 but got a=%f'%a)
     return (exp(x * log(a+1.0)) - 1.0) / a
 
 #
@@ -371,7 +371,7 @@ datad['seismic_r'] = { 'cmap': cm.seismic_r, 'alpha': alphad }
 
 # Define direct, reversed and scaled color tables (transparent)
 log_scale = lambda x: nexp(x,10.0) 
-for name, data in datad.iteritems():
+for name, data in datad.items():
     locals()[name] = SegmentedColormap(name, data, LUTSIZE)
 #    name_r = name+'_r'
 #    locals()[name_r] = SegmentedColormap(name_r, data, LUTSIZE, reverse=True )
@@ -379,7 +379,7 @@ for name, data in datad.iteritems():
     locals()[name_l] = SegmentedColormap(name_l, data, LUTSIZE, scale=log_scale)
 
 # Define direct, reversed and scaled color tables (opaque)
-for name, data in datao.iteritems():
+for name, data in datao.items():
     #locals()[name] = SegmentedColormap(name, data, LUTSIZE)
     name_r = name+'_r'
     locals()[name_r] = SegmentedColormap(name_r, data, LUTSIZE, reverse=True )

@@ -30,7 +30,7 @@ __version__ = '1.1.0'
 
 from copy      import deepcopy
 from numpy     import ma, array
-from gahandle  import GaHandle
+from .gahandle  import GaHandle
 
 from datetime  import datetime
 
@@ -70,7 +70,7 @@ class GaGrid(object):
             self.lat  = array(coords.lat)
             self.lon  = array(coords.lon)
         else:
-            raise TypeError, "coords must be a GaHandle object"
+            raise TypeError("coords must be a GaHandle object")
 
     def copy(self):
         """

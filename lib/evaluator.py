@@ -315,7 +315,7 @@ class Evaluator(object):
         except:
             tm_index = 1
 
-        self.file = dict(zip(['fileID','tm_request','tm_file','tm_index'],
-                             [fid, tm_request, tm_file, tm_index]))
+        self.file = dict(list(zip(['fileID','tm_request','tm_file','tm_index'],
+                             [fid, tm_request, tm_file, tm_index])))
 
         return self.file
