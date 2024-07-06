@@ -4,36 +4,38 @@ import os
 import sys
 import copy
 
-import wxservice
-import interface
+from .lib import wxservice
+from .lib import interface
 
-from request import *
-from taskmanager import *
+from .lib.request import Request
+from .lib.taskmanager import TaskManager
 
-task    = TaskManager()
-request = Request(interface.parse_args(sys.argv[1:]))
+if __name__ == "__main__":
 
-wx = wxservice.WXService(request)
+    task    = TaskManager()
+    request = Request(interface.parse_args(sys.argv[1:]))
 
-playlist = wx.playlist()
+    wx = wxservice.WXService(request)
 
-for play in playlist:
+    playlist = wx.playlist()
 
-    for request in play:
+    for play in playlist:
 
-        for r in request:
+        for request in play:
 
-            if not os.path.isfile(r['oname']):
+            for r in request:
 
-                cmd          = copy.copy(sys.argv[1:])
-                index        = cmd.index('--start_dt')               
-                start_dt     = r['time_dt']
-                cmd[index+1] = start_dt.strftime('%Y%m%dT%H%M%S')
-    
-                cmd.append('--field '  + r['field'])
-                cmd.append('--region ' + r['region'])
-                cmd.append('--level '  + r['level'])
-                task.spawn('wxmap.py ' + ' '.join(cmd))
-                break
+                if not os.path.isfile(r['oname']):
 
-task.wait()
+                    cmd          = copy.copy(sys.argv[1:])
+                    index        = cmd.index('--start_dt')               
+                    start_dt     = r['time_dt']
+                    cmd[index+1] = start_dt.strftime('%Y%m%dT%H%M%S')
+        
+                    cmd.append('--field '  + r['field'])
+                    cmd.append('--region ' + r['region'])
+                    cmd.append('--level '  + r['level'])
+                    task.spawn('wxmap.py ' + ' '.join(cmd))
+                    break
+
+    task.wait()
