@@ -4,32 +4,34 @@ import os
 import sys
 import copy
 
-import wxservice
-import interface
+from .lib import wxservice
+from .lib import interface
 
-from request import *
-from taskmanager import *
+from .lib.request import Request
+from .lib.taskmanager import TaskManager
 
-request = Request(interface.parse_args(sys.argv[1:]))
+if __name__ == "__main__":
 
-wx = wxservice.WXService(request)
-#wx = wxservice.WXServiceLite(request)
+    request = Request(interface.parse_args(sys.argv[1:]))
 
-print("\n", 'default', ":\n")
+    wx = wxservice.WXService(request)
+    #wx = wxservice.WXServiceLite(request)
 
-for k,v in wx.config('default',{}).items():
-   print(k, ":", v)
+    print("\n", 'default', ":\n")
 
-response = wx.get_capabilities()
+    for k,v in wx.config('default',{}).items():
+    print(k, ":", v)
 
-for key in response:
+    response = wx.get_capabilities()
 
-    result = response[key]
-    print("\n", key, ":\n")
+    for key in response:
 
-    if isinstance(result, list):
-        print(result)
-    else:
-        for k,v in result.items():
-            print(k, ":", v)
+        result = response[key]
+        print("\n", key, ":\n")
+
+        if isinstance(result, list):
+            print(result)
+        else:
+            for k,v in result.items():
+                print(k, ":", v)
 
