@@ -156,7 +156,7 @@ class GaField (ma.MaskedArray):
     __ror__ = ga_ops(ma.MaskedArray.__ror__)
 #   __repr__ = ga_ops(ma.MaskedArray.__repr__)
     __rsub__ = ga_ops(ma.MaskedArray.__rsub__)
-    __rdiv__ = ga_ops(ma.MaskedArray.__rdiv__)
+    __rtruediv__ = ga_ops(ma.MaskedArray.__rtruediv__)
     __rmul__ = ga_ops(ma.MaskedArray.__rmul__)
     __rmod__ = ga_ops(ma.MaskedArray.__rmod__)
     __rshift__ = ga_ops(ma.MaskedArray.__rshift__)

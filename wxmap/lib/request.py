@@ -1,7 +1,8 @@
 import uuid
-import mydatetime as dt
 
-from string import *
+from . import mydatetime as dt
+
+from string import Template
 
 novalue = object()
 

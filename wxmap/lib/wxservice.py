@@ -3,12 +3,13 @@ import sys
 import copy
 import glob
 import collections
-import mydatetime as dt
 
-import config
+from . import mydatetime as dt
 
-from request import *
-from encoder import *
+from . import config
+
+from .request import Request
+from .encoder import Encoder
 
 class WXService(object):
 

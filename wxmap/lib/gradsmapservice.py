@@ -5,7 +5,7 @@ import re
 import os
 import io
 
-from string import *
+from string import Template
 
 import numpy.ma as ma
 from mpl_toolkits.basemap import Basemap
@@ -14,7 +14,7 @@ from PIL import Image, ImageChops, ImageEnhance, ImageDraw, ImageFont
 from PIL.ImageColor import getcolor, getrgb
 from PIL.ImageOps import grayscale
 
-from mapservice import *
+from .mapservice import MapService
 
 novalue = object()
 

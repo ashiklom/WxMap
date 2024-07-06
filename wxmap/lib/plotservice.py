@@ -2,8 +2,10 @@ import copy
 import json
 import calendar
 
-import mydatetime as dt
-from plot import *
+from . import mydatetime as dt
+from .plot import Plot
+
+from math import log, exp
 
 novalue = object()
 

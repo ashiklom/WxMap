@@ -1,4 +1,4 @@
-import gdsvml
+from . import gdsvml
 
 class MapService(object):
 

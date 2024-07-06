@@ -2,7 +2,8 @@
 import os
 import sys
 import argparse
-import mydatetime as dt
+
+from . import mydatetime as dt
 
 def parse_args(args=None):
 
