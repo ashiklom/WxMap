@@ -2,44 +2,42 @@
 
 import os
 import sys
-import copy
 import json
 
-import config
-import wxservice
-import interface
+from .lib import wxservice
+from .lib import interface
 
-from request import *
+from .lib.request import Request
 
-request  = Request(interface.parse_args(sys.argv[1:]))
-wx       = wxservice.WXService(request)
+if __name__ == "__main__":
 
-bin_name = request.get_key()
-bin_path = wx.config('bin_path', './')
-bin_path = os.path.join(bin_path, bin_name)
+    request  = Request(interface.parse_args(sys.argv[1:]))
+    wx       = wxservice.WXService(request)
 
-print(bin_path)
+    bin_name = request.get_key()
+    bin_path = wx.config('bin_path', './')
+    bin_path = os.path.join(bin_path, bin_name)
 
-try:
-    os.makedirs(bin_path, 0o755)
-except:
-    pass
+    print(bin_path)
 
-playlist = wx.playlist()
+    try:
+        os.makedirs(bin_path, 0o755)
+    except:
+        pass
 
-i = 0
-for play in playlist:
+    playlist = wx.playlist()
 
-    file = 'wx%03d.json'%(i) 
-    file = os.path.join(bin_path, file)
-    print(file)
+    i = 0
+    for play in playlist:
 
-#   wx.config['plotservice_'] = wx.ps
-#   wx.config['theme_'] = wx.ps.name
-    wx.config.serialize(wx.config)
-    with open(file, 'w') as outfile:
-        json.dump(wx.config, outfile)
+        file = 'wx%03d.json'%(i) 
+        file = os.path.join(bin_path, file)
+        print(file)
 
-    i += 1
+    #   wx.config['plotservice_'] = wx.ps
+    #   wx.config['theme_'] = wx.ps.name
+        wx.config.serialize(wx.config)
+        with open(file, 'w') as outfile:
+            json.dump(wx.config, outfile)
 
-sys.exit(0)
+        i += 1
