@@ -1,14 +1,13 @@
 #! /usr/bin/env python
 
-import os
 import sys
 
 import numpy as np
 
-import wxservice
-import interface
+from .lib import wxservice
+from .lib import interface
 
-from request import *
+from .lib.request import Request
 
 def write_cmap(name, cmap):
 

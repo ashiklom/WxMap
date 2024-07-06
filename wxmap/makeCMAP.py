@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-import os
 import sys
 import yaml
 import uuid
@@ -108,49 +107,45 @@ def write_rgba(file, cmap):
 
         print('')
 
-########
-# Main #
-########
+if __name__ == "__main__":
 
-for file in sys.argv[1:]:
+    for file in sys.argv[1:]:
 
-    CMAP = {}
+        CMAP = {}
 
-    with open(file, 'r') as ymlfile:
-        config = yaml.load(ymlfile)
+        with open(file, 'r') as ymlfile:
+            config = yaml.load(ymlfile)
 
-    colorbar = config['attribute']['colorbar']
+        colorbar = config['attribute']['colorbar']
 
-    for name, clist in colorbar.items():
+        for name, clist in colorbar.items():
 
-        if isinstance(clist, dict):
-            CMAP[name] = clist
-            continue
+            if isinstance(clist, dict):
+                CMAP[name] = clist
+                continue
 
-        cmap   = {}
-        colors = []
+            cmap   = {}
+            colors = []
 
-        for color in clist:
+            for color in clist:
 
-            rgba  = [ float(c)/255.0 for c in color.split() if c != ' ' ]
-            if len(rgba) < 4: rgba.append(1.0)
-            colors.append(rgba)
+                rgba  = [ float(c)/255.0 for c in color.split() if c != ' ' ]
+                if len(rgba) < 4: rgba.append(1.0)
+                colors.append(rgba)
 
-        data = np.linspace(0.0, 1.0, len(colors))
+            data = np.linspace(0.0, 1.0, len(colors))
 
-        for i,channel in enumerate(['red', 'green', 'blue', 'alpha']):
+            for i,channel in enumerate(['red', 'green', 'blue', 'alpha']):
 
-            cmap[channel] = []
+                cmap[channel] = []
 
-            for index, rgba in enumerate(colors):
-                x  = data[index]
-                y0 = rgba[i]
-                y1 = y0
-                values = '%5.3f'%(x) + ' ' + '%5.3f'%(y0) + ' ' + '%5.3f'%(y1)
-                cmap[channel].append(values)
+                for index, rgba in enumerate(colors):
+                    x  = data[index]
+                    y0 = rgba[i]
+                    y1 = y0
+                    values = '%5.3f'%(x) + ' ' + '%5.3f'%(y0) + ' ' + '%5.3f'%(y1)
+                    cmap[channel].append(values)
 
-        CMAP[name] = cmap
+            CMAP[name] = cmap
 
-    write_cmap(file, CMAP)
-
-sys.exit(0)
+        write_cmap(file, CMAP)
