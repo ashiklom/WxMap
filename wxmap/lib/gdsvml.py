@@ -172,8 +172,8 @@ class GDSVML(object):
             return result
         else:
 
-            list2 = re.sub("\s+"," ",default).split()
-            list1 = re.sub("\s+"," ",state).split() + [None]*len(list2)
+            list2 = re.sub(r"\s+"," ",default).split()
+            list1 = re.sub(r"\s+"," ",state).split() + [None]*len(list2)
 
             if "auto" in list1:
                 return ' '.join(list2)

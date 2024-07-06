@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     try:
         os.makedirs(bin_path, 0o755)
-    except:
+    except Exception:
         pass
 
     playlist = wx.playlist()

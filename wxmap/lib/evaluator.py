@@ -1,7 +1,6 @@
 import re
-import sys
-import field
-import gdsvml
+from . import field
+from . import gdsvml
 
 class Evaluator(object):
 

@@ -35,7 +35,7 @@ if __name__ == "__main__":
                 opath = os.path.dirname(r['oname'])
                 try:
                     os.makedirs(opath, 0o755)
-                except:
+                except Exception:
                     pass
 
                 ds  = wx.renew(10)

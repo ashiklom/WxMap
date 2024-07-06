@@ -1,12 +1,11 @@
 import re
 import os
 import copy
-import sys
 import glob
 import json
 import math
 import collections
-from string import *
+# from string import *
 
 import numpy as np
 
@@ -15,12 +14,12 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.colors as mc
 
-import gdsvml
-import field
-import evaluator
-import toolkit
+from . import gdsvml
+from . import field
+from . import evaluator
+from . import toolkit
 
-from mygrads.gacm import *
+from .mygrads.gacm import *
 
 novalue = object()
 
@@ -41,7 +40,8 @@ class Plot(object):
             self.theme   = service.name
             self.service = service
 
-        if passive: self.ds = None
+        if passive:
+            self.ds = None
 
         self.request = dict(request)
         self.fields  = []
@@ -63,13 +63,14 @@ class Plot(object):
 
         defs = dict(self.request)
         defs.update(self.defs)
-        if self.config: defs.update(self.config.get('defs', {}))
+        if self.config: 
+            defs.update(self.config.get('defs', {}))
         defs.update(kwargs)
         defs = { k:str(v) for k,v in defs.items() }
 
         cmds = self.rsubstitute(commands, **defs)
         cmds = cmds.strip().split('\n')
-        cmds = [re.sub("\s+"," ",cmd.strip()) for cmd in cmds if len(cmd) > 0]
+        cmds = [re.sub(r"\s+"," ",cmd.strip()) for cmd in cmds if len(cmd) > 0]
         cmds = self.filter(cmds, self.defs)
 
         layer       = int(kwargs.get('zorder',0))
@@ -80,7 +81,7 @@ class Plot(object):
 
         for cmd in cmds:
 
-            directive = cmd.split(' ')[0]
+            # directive = cmd.split(' ')[0]
 
             if self.lang.is_display(cmd):
                 
@@ -100,7 +101,8 @@ class Plot(object):
                 self.cmds.append('set xlopts ' + str(c) + ' 1')
                 self.cmds.append('set ylopts ' + str(c) + ' 1')
 
-                if self.passive: continue
+                if self.passive: 
+                    continue
                 self.substitute(fileID=self.ds.fileID)
 
             elif self.lang.is_define(cmd):
@@ -116,14 +118,16 @@ class Plot(object):
 
                 self.cmds.append('define ' + var + '=' + expr)
 
-                if self.passive: continue
+                if self.passive: 
+                    continue
                 self.substitute(fileID=self.ds.fileID)
 
             elif self.lang.is_rgb(cmd):
 
                 self.substitute(color=self.color)
                 self.color = self.lang.get_color(cmd)
-                if self.color > 30: self.cmds.append(cmd)
+                if self.color > 30: 
+                    self.cmds.append(cmd)
 
             else:
 
@@ -136,7 +140,8 @@ class Plot(object):
         self.is_regional = True
         self.cmds  = self.get_layer_stack('cmds')
 
-        if self.passive: return
+        if self.passive: 
+            return
 
         if commands is None:
             commands = self.cmds
@@ -274,13 +279,15 @@ class Plot(object):
 
         for cmd in commands:
 
-            if cmd[0] == '#': continue
+            if cmd[0] == '#': 
+                continue
 
             if cmd[0] == '>':
                 cmds.append(cmd[1:])
                 continue
 
-            if self.lang.is_auto(cmd): continue
+            if self.lang.is_auto(cmd): 
+                continue
 
             if self.lang.is_special(cmd):
                 cmds.append(cmd)
@@ -409,7 +416,8 @@ class Plot(object):
         for color in clist:
 
             rgba  = [ float(c)/255.0 for c in color.split() if c != ' ' ]
-            if len(rgba) < 4: rgba.append(1.0)
+            if len(rgba) < 4: 
+                rgba.append(1.0)
             colors.append(rgba)
 
         data = np.linspace(0.0, 1.0, len(colors))
@@ -510,10 +518,14 @@ class Plot(object):
 
     def set_clevs(self, clevs, cmin, cmax, cint):
 
-        if clevs: return clevs
-        if cmin is None: return 
-        if cmax is None: return
-        if cint is None: return
+        if clevs: 
+            return clevs
+        if cmin is None: 
+            return 
+        if cmax is None: 
+            return
+        if cint is None: 
+            return
 
         vmin = float(cmin)
         vmax = float(cmax)
@@ -557,8 +569,10 @@ class Plot(object):
         fpath = [self.theme,'plot',self.request['field'],'shape']
         shape =  self.config(fpath, 'on')
 
-        if str(shape) == 'off': return
-        if not self.request.get('shape', 1): return
+        if str(shape) == 'off': 
+            return
+        if not self.request.get('shape', 1): 
+            return
 
         if isinstance(shape, dict):
             map = copy.deepcopy(shape)
@@ -569,7 +583,8 @@ class Plot(object):
 
         for shape in map:
 
-            if str(map[shape]) == 'off': continue
+            if str(map[shape]) == 'off': 
+                continue
         
             sh_class = self.config(['shape',shape,'class'],shape)
             draw     = getattr(tk, sh_class, None)
@@ -587,10 +602,12 @@ class Plot(object):
 
         rpath = ['region',self.request['region'],'track']
         track = self.config(rpath, {})
-        if str(track) == 'off': return
+        if str(track) == 'off': 
+            return
 
         track_name   = self.request.get('track', [])
-        if not track_name: return
+        if not track_name: 
+            return
 
         track_path   = self.config.get('track_path', None)
         track_files  = self.get_files(track_name, track_path)
@@ -690,7 +707,8 @@ class Plot(object):
         for ltype in self.lang.label_types:
 
             d = annotate.get(ltype, None)
-            if not isinstance(d, dict): continue
+            if not isinstance(d, dict):
+                continue
 
             d = dict(d)
 
@@ -701,9 +719,11 @@ class Plot(object):
                 d['string'] = d_alt
 
             skip_label = no_title
-            if ltype in self.request: skip_label = False
+            if ltype in self.request:
+                skip_label = False
 
-            if skip_label: continue
+            if skip_label: 
+                continue
 
             handle.type   = ltype
             handle.string = d.get('string',   '')
@@ -714,11 +734,14 @@ class Plot(object):
             handle.margin = d.get('margin', '0.05')
 
             font = d.get('font', 'regular')
-            if font == 'variable': font = 'regular'
-            if font[0] != '$': font = '$' + font
+            if font == 'variable': 
+                font = 'regular'
+            if font[0] != '$': 
+                font = '$' + font
             handle.font = font
 
-            if not handle.string: continue
+            if not handle.string:
+                continue
 
             self.cmd("""
               @TYPE $type
@@ -825,7 +848,8 @@ class Plot(object):
             map['grid']   = map.get('grid', '--auto')
             map['xlint'] = map.get('xlint', '--auto')
             map['ylint'] = map.get('ylint', '--auto')
-            if not map['mpvals']: map['mpvals'] = map['lon'] + ' ' + map['lat']
+            if not map['mpvals']:
+                map['mpvals'] = map['lon'] + ' ' + map['lat']
 
             map['layers'] += addlayers
 

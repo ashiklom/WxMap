@@ -6,7 +6,7 @@ import uuid
 
 import numpy as np
 
-def write_cmap(file, cmap):
+def write_cmap(_, cmap):
 
     cm_addr   = {}
     cm_ref    = {}
@@ -45,7 +45,8 @@ def write_cmap(file, cmap):
         for key in cm_keys:
 
             map = cm.get(key, None)
-            if not map: continue
+            if not map: 
+                continue
 
             if isinstance(map, list):
                 print(' '*6 + key + ':')
@@ -57,7 +58,7 @@ def write_cmap(file, cmap):
 
         print('')
 
-def write_rgba(file, cmap):
+def write_rgba(_, cmap):
 
     cm_addr   = {}
     cm_ref    = {}
@@ -114,7 +115,7 @@ if __name__ == "__main__":
         CMAP = {}
 
         with open(file, 'r') as ymlfile:
-            config = yaml.load(ymlfile)
+            config = yaml.safe_load(ymlfile)
 
         colorbar = config['attribute']['colorbar']
 
@@ -130,7 +131,8 @@ if __name__ == "__main__":
             for color in clist:
 
                 rgba  = [ float(c)/255.0 for c in color.split() if c != ' ' ]
-                if len(rgba) < 4: rgba.append(1.0)
+                if len(rgba) < 4: 
+                    rgba.append(1.0)
                 colors.append(rgba)
 
             data = np.linspace(0.0, 1.0, len(colors))

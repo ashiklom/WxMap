@@ -1,8 +1,6 @@
 import os
-import sys
-import fnmatch
-from string import *
-import mydatetime as dt
+from string import Template
+from . import mydatetime as dt
 
 class DataService(object):
 

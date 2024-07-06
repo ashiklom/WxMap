@@ -7,6 +7,7 @@ name = "WxMap"
 version = "0.0.1"
 requires-python = ">= 3.9"
 dependencies = [
+  "basemap",
   "matplotlib",
   "netcdf4",
   "numpy",
@@ -28,3 +29,5 @@ WxMap = { path = ".", editable = true }
 
 [tool.pixi.dependencies]
 netcdf4 = ">=1.7.1,<1.8"
+ipython = ">=8.26.0,<8.27"
+basemap = ">=1.4.1,<1.5"

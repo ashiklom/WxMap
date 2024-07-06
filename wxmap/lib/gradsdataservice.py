@@ -1,7 +1,5 @@
-import gdsvml
-from dataservice import *
-#from grads.ganum import GaNum
-from mygrads.ganum import GaNum
+from .dataservice import DataService
+from .mygrads.ganum import GaNum
 
 class Service(GaNum,DataService):
 

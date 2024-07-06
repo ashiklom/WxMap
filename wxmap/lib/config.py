@@ -1,6 +1,5 @@
 import os
 import re
-import sys
 import copy
 import yaml
 import json

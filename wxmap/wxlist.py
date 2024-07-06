@@ -1,14 +1,11 @@
 #! /usr/bin/env python
 
-import os
 import sys
-import copy
 
 from .lib import wxservice
 from .lib import interface
 
 from .lib.request import Request
-from .lib.taskmanager import TaskManager
 
 if __name__ == "__main__":
 
@@ -20,7 +17,7 @@ if __name__ == "__main__":
     print("\n", 'default', ":\n")
 
     for k,v in wx.config('default',{}).items():
-    print(k, ":", v)
+        print(k, ":", v)
 
     response = wx.get_capabilities()
 

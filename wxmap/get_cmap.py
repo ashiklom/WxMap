@@ -16,7 +16,8 @@ def write_cmap(name, cmap):
     for key in ['cmap', 'red', 'green', 'blue', 'alpha', 'reverse', 'scale']:
 
         map = cmap.get(key, None)
-        if not map: continue
+        if not map: 
+            continue
 
         if isinstance(map, list):
             print(' '*6 + key + ':')
@@ -45,7 +46,8 @@ for name, clist in colorbar.items():
     for color in clist:
 
         rgba  = [ float(c)/255.0 for c in color.split() if c != ' ' ]
-        if len(rgba) < 4: rgba.append(1.0)
+        if len(rgba) < 4:
+            rgba.append(1.0)
         colors.append(rgba)
 
     data = np.linspace(0.0, 1.0, len(colors))
