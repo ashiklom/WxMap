@@ -310,14 +310,14 @@ class GaLab(GaNum):
 #       Set the mode on/off
 #       -------------------
         if mode is not None:
-	    if mode=='off' or mode=='OFF' or mode=='Off':
+            if mode=='off' or mode=='OFF' or mode=='Off':
                 self.blue = None
- 	    elif mode=='on' or mode=='ON' or mode=='On':
-	        self.blue = ma.zeros((1,1,4)) # Will be filled in at first use
-	    else:
+            elif mode=='on' or mode=='ON' or mode=='On':
+                self.blue = ma.zeros((1,1,4)) # Will be filled in at first use
+            else:
                 raise GrADSError('Invalid Blue Marble mode')
-	    self.blue_stamp = None # will force update on first use
-	    self.blue_size = (-1,-1)            
+            self.blue_stamp = None # will force update on first use
+            self.blue_size = (-1,-1)            
             return None
 
 #       Make sure we have a basemap
