@@ -3,3 +3,5 @@
 .pixi
 *.egg-info
 
+# Opengrads installation
+opengrads-2.2.1.oga.1/

@@ -26,8 +26,13 @@ platforms = ["linux-64"]
 WxMap = { path = ".", editable = true }
 
 [tool.pixi.tasks]
+get_grads = { cmd = "curl -L https://sourceforge.net/projects/opengrads/files/grads2/2.2.1.oga.1/Linux%20%2864%20Bits%29/opengrads-2.2.1.oga.1-bundle-x86_64-pc-linux-gnu-glibc_2.17.tar.gz/download | tar -xz", outputs = ["opengrads-2.2.1.oga.1/README"] }
 
 [tool.pixi.dependencies]
 netcdf4 = ">=1.7.1,<1.8"
 ipython = ">=8.26.0,<8.27"
 basemap = ">=1.4.1,<1.5"
+
+[tool.pixi.activation]
+env = {PATH = "$PATH:$PWD/opengrads-2.2.1.oga.1/Contents/"}
+# scripts = ["env_setup.sh"]

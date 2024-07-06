@@ -2063,7 +2063,7 @@ packages:
   name: wxmap
   version: 0.0.1
   path: .
-  sha256: 7fbd88f917c3d0861e994ba344d8c455e82cbfdd1a413737caf58ee3206e4866
+  sha256: 8c89d976555aac83403824348212c2acf1fcf31db302b330bf233aa2b684f835
   requires_dist:
   - basemap
   - matplotlib
