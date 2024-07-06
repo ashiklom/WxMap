@@ -5,13 +5,12 @@ matplotlib.use('Agg')
 
 import os
 import sys
-import copy
-import wxservice
-import interface
-import gradsdataservice as dataservice
-import gradsmapservice as mapservice
+from .lib import wxservice
+from .lib import interface
+from .lib import gradsdataservice as dataservice
+from .lib import gradsmapservice as mapservice
 
-from request import *
+from .lib.request import Request
 
 if __name__ == "__main__":
 
