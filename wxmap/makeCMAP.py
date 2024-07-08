@@ -108,7 +108,7 @@ def write_rgba(_, cmap):
 
         print('')
 
-if __name__ == "__main__":
+def main():
 
     for file in sys.argv[1:]:
 
@@ -151,3 +151,7 @@ if __name__ == "__main__":
             CMAP[name] = cmap
 
         write_cmap(file, CMAP)
+
+
+if __name__ == "__main__":
+    main()

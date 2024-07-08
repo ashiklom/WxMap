@@ -10,7 +10,7 @@ from .lib import interface
 from .lib.request import Request
 from .lib.taskmanager import TaskManager
 
-if __name__ == "__main__":
+def main():
 
     task    = TaskManager()
     request = Request(interface.parse_args(sys.argv[1:]))
@@ -39,3 +39,6 @@ if __name__ == "__main__":
                     break
 
     task.wait()
+
+if __name__ == "__main__":
+    main()

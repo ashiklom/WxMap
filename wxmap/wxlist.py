@@ -7,7 +7,7 @@ from .lib import interface
 
 from .lib.request import Request
 
-if __name__ == "__main__":
+def main():
 
     request = Request(interface.parse_args(sys.argv[1:]))
 
@@ -32,3 +32,5 @@ if __name__ == "__main__":
             for k,v in result.items():
                 print(k, ":", v)
 
+if __name__ == "__main__":
+    main()

@@ -12,7 +12,7 @@ from .lib import gradsmapservice as mapservice
 
 from .lib.request import Request
 
-if __name__ == "__main__":
+def main():
 
     request = Request(interface.parse_args(sys.argv[1:]))
 
@@ -41,3 +41,6 @@ if __name__ == "__main__":
                 ds  = wx.renew(10)
                 map = wx.get_map(r)
                 print(map)
+
+if __name__ == "__main__":
+    main()

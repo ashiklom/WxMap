@@ -9,7 +9,7 @@ from .lib import interface
 
 from .lib.request import Request
 
-if __name__ == "__main__":
+def main():
 
     request  = Request(interface.parse_args(sys.argv[1:]))
     wx       = wxservice.WXService(request)
@@ -41,3 +41,6 @@ if __name__ == "__main__":
             json.dump(wx.config, outfile)
 
         i += 1
+
+if __name__ == "__main__":
+    main()
