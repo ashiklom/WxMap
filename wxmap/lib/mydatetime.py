@@ -3,17 +3,14 @@ import datetime as dt
 
 class datetime(dt.datetime):
 
-    def __init__(self, *args, **kwargs):
-
-        super(datetime,self).__init__(*args, **kwargs)
-        self.m = 'JFMAMJJASOND'
-
     def strftime(self, s1):
+
+        m = 'JFMAMJJASOND'
 
         m1 = self.month - 2
         m2 = self.month - 1
         m3 = self.month
-        mmm = self.m[m1-1] + self.m[m2-1] + self.m[m3-1]
+        mmm = m[m1-1] + m[m2-1] + m[m3-1]
 
         i  = 0
         s2 = ''
