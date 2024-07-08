@@ -132,6 +132,10 @@ class GaCore(GrADSObject):
                 default is to start GrADS in batch mode.
         """
 
+        self.Echo = Echo
+        self.Verb = Verb
+        self.Strict = Strict
+
 #       Default foe graphical window
 #       ----------------------------
         if Window==None:
@@ -169,9 +173,6 @@ class GaCore(GrADSObject):
 #       ------------
         self.Reader = Reader
         self.Writer = Writer
-        self.Echo = Echo
-        self.Verb = Verb
-        self.Strict = Strict
         self.rc = 0
 
 #       Parse out inital splash screen
