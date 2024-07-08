@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 
+import datetime
 from . import mydatetime as dt
 
 def parse_args(args=None):
@@ -158,7 +159,7 @@ def parse_args(args=None):
     p_args = vars(parser.parse_args(args))
 
     if p_args['time_dt'] is None:
-        now    = dt.datetime.utcnow()
+        now    = dt.datetime.now(datetime.UTC)
         hour   = int(now.hour / 12) * 12
         hhmmss = "%06d"%(hour*10000,)
         p_args['time_dt'] = now.strftime('%Y%m%dT' + hhmmss)
