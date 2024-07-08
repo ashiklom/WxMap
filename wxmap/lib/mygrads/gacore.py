@@ -39,8 +39,6 @@ import os
 from time     import sleep
 from datetime import datetime
 from calendar import timegm
-from string   import *
-from types    import *
 from math     import floor, ceil
 from time     import time
 from array    import array as array
@@ -159,7 +157,7 @@ class GaCore(GrADSObject):
             # http://bit.ly/qvkUQK
             self.p = Popen(cmdline, **Kwds )                  # could be popen2() or Popen)
 
-            if type(self.p) is TupleType:
+            if isinstance(self.p, tuple):
                 Reader, Writer = self.p                       # older popen2() 
             else:
                 Reader, Writer = self.p.stdout, self.p.stdin  # newer Popen
@@ -192,11 +190,11 @@ class GaCore(GrADSObject):
         self.HAS_UDXT = False
         self.HAS_UDCT = False # old v1.9.0-rc1 style (deprecated)
         self.cmd('q udxt',Quiet=True)
-        if self.rword(1,1) is not 'Invalid':
+        if self.rword(1,1) != 'Invalid':
             self.HAS_UDXT = True
         else:
             self.cmd('q udct',Quiet=True) # as in v1.9.0-rc1
-            if self.rword(1,1) is not 'Invalid':
+            if self.rword(1,1) != 'Invalid':
                 self.HAS_UDXT = True
                 self.HAS_UDCT = True
 
@@ -531,7 +529,7 @@ class GaCore(GrADSObject):
 
 #       Parse output
 #       ------------
-        tokens = split(what)
+        tokens = what.split()
         what = tokens[0]
 
 #       query dims
@@ -576,7 +574,7 @@ class GaCore(GrADSObject):
 
 #           Ensemble dimension only supported in GrADS v2.0
 #           -----------------------------------------------
-            if self.Version[1] is '2':
+            if self.Version[1] == '2':
                 qh.e_state = self.rword(6,3)
                 if qh.e_state == 'fixed':
                     qh.ens = (self.rword(6,6), self.rword(6,6))
@@ -617,8 +615,8 @@ class GaCore(GrADSObject):
 #       ----------------
         elif what == 'file':
 
-            tokens = split(self.rline(1))
-            qh.title = join(tokens[3:])
+            tokens = self.rline(1).split()
+            qh.title = tokens[3:].join()
 
             qh.fid   = int(self.rword(1,2))
             qh.desc  = self.rword(2,2)
@@ -629,7 +627,7 @@ class GaCore(GrADSObject):
             qh.nz    = int(self.rword(5,9))
             qh.nt    = int(self.rword(5,12))
 
-            if self.Version[1] is '2':
+            if self.Version[1] == '2':
                 qh.ne = int(self.rword(5,15))
             else:
                 qh.ne = 1
@@ -849,12 +847,12 @@ class GaCore(GrADSObject):
         self.cmd("set x 1",Quiet=True)
         self.cmd("set y 1",Quiet=True)
         self.cmd("set z 1",Quiet=True)
-        if self.Version[1] is '2':
+        if self.Version[1] == '2':
             self.cmd("set e 1",Quiet=True)
 
 #       ensemble coordinates
 #       --------------------
-        if self.Version[1] is '2':
+        if self.Version[1] == '2':
             ch.ens = []
             for n in range(dh.ne):
                 e = dh.ei[0] + n
@@ -893,7 +891,7 @@ class GaCore(GrADSObject):
 
 #       Retore dimension environment
 #       ----------------------------
-        if self.Version[1] is '2':
+        if self.Version[1] == '2':
             self.cmd("set e %d %d"%dh.ei,Quiet=True)
         self.cmd("set t %d %d"%dh.ti,Quiet=True)
         self.cmd("set z %d %d"%dh.zi,Quiet=True)
@@ -1064,7 +1062,7 @@ class GaCore(GrADSObject):
             self.cmd("set y %d %d"%dh.y,Quiet=True)
             self.cmd("set z %d %d"%dh.z,Quiet=True)
             self.cmd("set t %d %d"%dh.t,Quiet=True)
-            if self.Version[1] is '2':
+            if self.Version[1] == '2':
                 self.cmd("set e %d %d"%dh.e,Quiet=True)
         except GrADSError:
             raise GrADSError('Cannot restore dimension environment')
@@ -1090,7 +1088,7 @@ class GaCore(GrADSObject):
             got = self.Reader.readline()
             if got == '':
                 raise GrADSError("GrADS terminated while waiting for response")
-            tokens = split(got)
+            tokens = got.split()
 
 #       Record GrADS command
 #       --------------------
@@ -1103,7 +1101,7 @@ class GaCore(GrADSObject):
         rc = -99
         got = self.Reader.readline()
         while got[:6] != '</IPC>':
-            tokens = split(got)
+            tokens = got.split()
             if got[:4] == '<RC>':
                 rc = tokens[1]
             else:
@@ -1154,15 +1152,15 @@ def _toHashMap(qh):
         value = qh.__dict__[key];
         if len(key) == 1:
             jkey = key+key  # Matlab cannot handle single char
-        if ( type(value) == TupleType or type(value) == ListType ):
-            vtype = type(value[0])
-            if vtype == FloatType:
+        if isinstance(value, (tuple, list)):
+            v0 = value[0]
+            if isinstance(v0, float):
                 value = jarray.array(value,'d')
-            elif vtype == IntType:
+            elif isinstance(v0, int):
                 value = jarray.array(value,'i')
-            elif vtype == LongType:
-                value = jarray.array(value,'l')
-        elif isinstance(value,GaHandle):
+            # elif vtype == LongType:  # No analog in Python3
+            #     value = jarray.array(value,'l')
+        elif isinstance(value, GaHandle):
             value = _toHashMap(value)
         jh[jkey] = value
     return jh
