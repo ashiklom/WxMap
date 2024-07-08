@@ -29,40 +29,43 @@ def write_cmap(name, cmap):
 
     print('')
 
-request = Request(interface.parse_args(sys.argv[1:]))
-wx      = wxservice.WXService(request)
+def main():
 
-colorbar = wx.config(['attribute', 'colorbar'])
+    request = Request(interface.parse_args(sys.argv[1:]))
+    wx      = wxservice.WXService(request)
 
-for name, clist in colorbar.items():
+    colorbar = wx.config(['attribute', 'colorbar'])
 
-    if isinstance(clist, dict):
-        write_cmap(name, clist)
-        continue
+    for name, clist in colorbar.items():
 
-    cmap   = {}
-    colors = []
+        if isinstance(clist, dict):
+            write_cmap(name, clist)
+            continue
 
-    for color in clist:
+        cmap   = {}
+        colors = []
 
-        rgba  = [ float(c)/255.0 for c in color.split() if c != ' ' ]
-        if len(rgba) < 4:
-            rgba.append(1.0)
-        colors.append(rgba)
+        for color in clist:
 
-    data = np.linspace(0.0, 1.0, len(colors))
+            rgba  = [ float(c)/255.0 for c in color.split() if c != ' ' ]
+            if len(rgba) < 4:
+                rgba.append(1.0)
+            colors.append(rgba)
 
-    for i,channel in enumerate(['red', 'green', 'blue', 'alpha']):
+        data = np.linspace(0.0, 1.0, len(colors))
 
-        cmap[channel] = []
+        for i,channel in enumerate(['red', 'green', 'blue', 'alpha']):
 
-        for index, rgba in enumerate(colors):
-            x  = data[index]
-            y0 = rgba[i]
-            y1 = y0
-            values = '%5.3f'%(x) + ' ' + '%5.3f'%(y0) + ' ' + '%5.3f'%(y1)
-            cmap[channel].append(values)
+            cmap[channel] = []
 
-    write_cmap(name, cmap)
+            for index, rgba in enumerate(colors):
+                x  = data[index]
+                y0 = rgba[i]
+                y1 = y0
+                values = '%5.3f'%(x) + ' ' + '%5.3f'%(y0) + ' ' + '%5.3f'%(y1)
+                cmap[channel].append(values)
 
-sys.exit(0)
+        write_cmap(name, cmap)
+
+if __name__ == "__main__":
+    main()
