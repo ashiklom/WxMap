@@ -3,6 +3,7 @@ import sys
 import copy
 import glob
 import collections
+from importlib import resources
 
 from . import mydatetime as dt
 
@@ -34,8 +35,7 @@ class WXService(object):
 
         self.request = copy.deepcopy(request)
 
-        install_path = os.path.dirname(sys.argv[0])
-        if not install_path: install_path = os.getcwd()
+        install_path = resources.files("wxmap")
         file = request.get('rc', None)
         if not file: file = os.path.join(install_path, 'wxmap.rc')
  
